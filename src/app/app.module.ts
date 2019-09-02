@@ -3,20 +3,20 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {ReactiveFormsModule} from "@angular/forms";
-import { CustomInputDirective } from './directives/custom-input.directive';
-import { CustomInputComponent } from './custom-input/custom-input.component';
+import { CustomInputDirective } from './custom-form/directives/custom-input.directive';
 import { CustomFormComponent } from './custom-form/custom-form.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
     CustomInputDirective,
-    CustomInputComponent,
     CustomFormComponent
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
