@@ -7,9 +7,7 @@ import {FormGroup, FormControl, Validator, Validators, ControlValueAccessor, NG_
   styleUrls: ['./app.component.sass'],
 })
 
-export class AppComponent implements OnInit{
-
+export class AppComponent implements OnInit {
   ngOnInit(): void {}
-
 
 }
