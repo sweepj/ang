@@ -36,7 +36,7 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
 
   public countries = [];
   private idCountry: number;
-  private findCountry: any;
+  public findCountry: any;
 
   set value(val) {
     // this.numberForm.get('phoneNumber').valueChanges.subscribe(value => {
@@ -83,7 +83,6 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       }
     });
   }
-
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
