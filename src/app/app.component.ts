@@ -9,8 +9,7 @@ import {FormGroup, FormControl, Validator, Validators, ControlValueAccessor, NG_
 
 export class AppComponent implements OnInit{
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
 
 }
