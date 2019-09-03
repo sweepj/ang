@@ -1,16 +1,16 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from "@angular/forms";
-import {observableToBeFn} from "rxjs/internal/testing/TestScheduler";
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {CountryService} from "../services/country.service";
+import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {CountryService} from '../services/country.service';
 
 
 @Component({
   selector: 'app-custom-form',
   templateUrl: './custom-form.component.html',
   styleUrls: ['./custom-form.component.sass'],
-  providers:[{
+  providers: [{
     provide : NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => CustomFormComponent),
     multi: true
@@ -32,13 +32,13 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
 
   constructor(private countryService: CountryService) { }
 
-  @Input() defaultCountry: string = '';
+  @Input() defaultCountry = '';
 
   public countries = [];
   private idCountry: number;
   private findCountry: any;
 
-  set value(val){
+  set value(val) {
     // this.numberForm.get('phoneNumber').valueChanges.subscribe(value => {
     //   this.idCountry = this.numberForm.get('countryId').value;
     //   console.log(this.findCountry.length);
@@ -55,16 +55,16 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       .subscribe(value => {
         this.countries = value;
         this.countries.find(i => {
-          if(i.code === this.defaultCountry){
+          if (i.code === this.defaultCountry) {
             this.numberForm.get('countryCode').patchValue(i.code);
           }
-        })
+        });
       });
 
     this.numberForm.get('countryCode').valueChanges
       .subscribe(value => {
-      for(let country of this.countries){
-        if(country.code === value){
+      for (const country of this.countries) {
+        if (country.code === value) {
           this.findCountry = country.dial_code;
           this.numberForm.get('phoneNumber').patchValue(country.dial_code);
         }
@@ -73,20 +73,20 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
 
     this.numberForm.get('phoneNumber').valueChanges.subscribe(value => {
       this.idCountry = this.numberForm.get('countryCode').value;
-      if(value.length < this.findCountry.length) {
+      if (value.length < this.findCountry.length) {
         this.countries.find(i => {
-          if (i.code === this.idCountry){
+          if (i.code === this.idCountry) {
             this.numberForm.get('phoneNumber').patchValue(i.dial_code);
             this.onChange = value;
           }
         });
       }
-    })
+    });
   }
 
 
   registerOnChange(fn: any): void {
-    this.onChange = fn
+    this.onChange = fn;
   }
 
   registerOnTouched(fn: any): void {
