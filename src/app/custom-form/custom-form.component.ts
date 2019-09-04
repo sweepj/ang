@@ -66,7 +66,7 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       for (const country of this.countries) {
         if (country.code === value) {
           this.findCountry = country.dial_code;
-          this.numberForm.get('phoneNumber').patchValue(country.dial_code);
+          // this.numberForm.get('phoneNumber').patchValue(country.dial_code);
         }
       }
     });
@@ -76,7 +76,7 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       if (value.length < this.findCountry.length) {
         this.countries.find(i => {
           if (i.code === this.idCountry) {
-            this.numberForm.get('phoneNumber').patchValue(i.dial_code);
+            // this.numberForm.get('phoneNumber').patchValue(i.dial_code);
             this.onChange = value;
           }
         });
