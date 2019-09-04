@@ -8,16 +8,20 @@
     </select>
   </label>
   <br>
-  <label>
-    Number phone:
+
+  <div style="margin-top: 10px;">
+    <label style="display: inline">
+      Number phone:
+    </label>
+    <div id="dial_code">{{findCountry}} </div>
     <input type="text" id="inputPhoneNumber" appCustomInput numbers="number" formControlName="phoneNumber" minlength="12">
     <h5 [hidden]="!numberForm.get('phoneNumber').hasError('minlength')"
         class="text-danger" >Invalid number</h5>
-  </label>
+  </div>
   <br>
   <button type="submit" [disabled]="!numberForm.valid">
     Click me!
   </button>
   <span [hidden]="!numberForm.get('testInput').valid">valid</span>
-  <p> Test Input: {{countries | json}}</p>
+<!--  <p> Test Input: {{countries | json}}</p>-->
 </form>
