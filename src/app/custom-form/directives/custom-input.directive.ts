@@ -13,7 +13,7 @@ export class CustomInputDirective {
   };
 
   private specialKeys = {
-    number: [ 'Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight']
+    number: [ 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight']
   };
 
   private valueInput;
@@ -24,16 +24,31 @@ export class CustomInputDirective {
 
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
+
+    if(event.key === 'Backspace'){
+      debugger
+      let tempValueInput = this.valueInput.split('');
+      let positionCaret = this.ElemRef.nativeElement.selectionStart;
+      // console.log(tempValueInput[this.ElemRef.nativeElement.selectionStart--]);
+      for(let i = 0; i < event.target.value.length; i++){
+        if(tempValueInput[i] === +positionCaret){
+          let temp = tempValueInput[i++];
+          tempValueInput[i] = temp;
+          tempValueInput.splice(i,1);
+          console.log('1');
+          return;
+        }
+      }
+    }
     if (this.specialKeys[this.numbers].indexOf(event.key) !== -1) {
       return;
     }
-    console.log(event.target.value);
-
-    if (event.target.value.length === 4) {
-      console.log(this.valueInput);
-      event.target.value = this.valueInput.replace(/^(\d{0,3})(\d{0,3})/, '($1) $2');
+    event.target.value = this.valueInput.replace(/^(\d{3})/, '($1) ');
+    // console.log(this.valueInput.replace(/^(\d{3})/, '($1)'));
+    if(event.target.value.length >= 9){
+      event.target.value = this.valueInput.replace(/\s(\d{3})(\d{2})/, ' $1-$2-');
+      // console.log(this.valueInput.replace(/\s(\d{3})(\d{2})/, ' $1-$2-'));
     }
-
 
     // if (event.target.value.length === (this.customFormCom.findCountry.length + this.defaultCharBrackets)) {
     //   let valueInput = event.target.value;
