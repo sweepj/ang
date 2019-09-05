@@ -16,21 +16,22 @@ export class CustomInputDirective {
     number: [ 'Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight']
   };
 
+  private valueInput;
   private defaultCharBrackets = 3;
   constructor(private ElemRef: ElementRef, private render: Renderer2, private customFormCom: CustomFormComponent) {}
 
+
+
   @HostListener('keydown', ['$event']) onKeyDown(event) {
-    let valueInput = event.target.value;
+    this.valueInput = event.target.value;
     if (this.specialKeys[this.numbers].indexOf(event.key) !== -1) {
       return;
     }
-    console.log(valueInput);
-    if(event.target.value.length === 3){
-      console.log(valueInput);
-      event.target.value = valueInput.replace(/^(\d{0,3})/g, "($1)");
-    }else if(event.target.value.length === 6){
-      console.log(valueInput.replace(/^(\d{0,3}) (\d{0,3})/g, "($1) $2"));
-      event.target.value = valueInput.replace(/^(\d{0,3}) (\d{0,3})/g, "($1) $2");
+    console.log(event.target.value);
+
+    if (event.target.value.length === 4) {
+      console.log(this.valueInput);
+      event.target.value = this.valueInput.replace(/^(\d{0,3})(\d{0,3})/, '($1) $2');
     }
 
 
