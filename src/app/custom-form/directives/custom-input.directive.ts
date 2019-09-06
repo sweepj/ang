@@ -13,7 +13,7 @@ export class CustomInputDirective {
   };
 
   private specialKeys = {
-    number: [ 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight']
+    number: ['Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight']
   };
 
   private valueInput;
@@ -24,30 +24,23 @@ export class CustomInputDirective {
 
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
-
-    if(event.key === 'Backspace'){
+    if(event.key === 'Backspace') {
       debugger
-      let tempValueInput = this.valueInput.split('');
-      let positionCaret = this.ElemRef.nativeElement.selectionStart;
-      // console.log(tempValueInput[this.ElemRef.nativeElement.selectionStart--]);
-      for(let i = 0; i < event.target.value.length; i++){
-        if(tempValueInput[i] === +positionCaret){
-          let temp = tempValueInput[i++];
-          tempValueInput[i] = temp;
-          tempValueInput.splice(i,1);
-          console.log('1');
-          return;
-        }
+      let positionCaret = this.ElemRef.nativeElement.selectionEnd;
+      positionCaret--;
+      console.log(typeof Number(event.target.value[positionCaret]));
+      if (event.target.value[positionCaret] === "-"){
+        event.preventDefault();
       }
     }
+
     if (this.specialKeys[this.numbers].indexOf(event.key) !== -1) {
       return;
     }
+
     event.target.value = this.valueInput.replace(/^(\d{3})/, '($1) ');
-    // console.log(this.valueInput.replace(/^(\d{3})/, '($1)'));
-    if(event.target.value.length >= 9){
+    if(event.target.value.length >= 7){
       event.target.value = this.valueInput.replace(/\s(\d{3})(\d{2})/, ' $1-$2-');
-      // console.log(this.valueInput.replace(/\s(\d{3})(\d{2})/, ' $1-$2-'));
     }
 
     // if (event.target.value.length === (this.customFormCom.findCountry.length + this.defaultCharBrackets)) {
@@ -66,9 +59,10 @@ export class CustomInputDirective {
     //   event.preventDefault();
     //   event.target.value = event.target.value.substr(0, (event.target.value.length));
     // }
+
     const current: string = this.ElemRef.nativeElement.value;
     const next: string = current.concat(event.key);
-    if (next && !String(next).match(this.regex[this.numbers]) || (event.target.value.length > 15)) {
+    if (next && !String(next).match(this.regex[this.numbers]) || (event.target.value.length > 14)) {
       event.preventDefault();
     }
   }
