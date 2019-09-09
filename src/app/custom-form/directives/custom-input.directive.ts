@@ -18,19 +18,22 @@ export class CustomInputDirective {
 
   private valueInput;
   private defaultCharBrackets = 3;
+  private mask = [/\(?(\d\d\d)\)?/, /\(?(\d\d\d)\)?\s?(\d\d\d)/, /\(?(\d\d\d)\)?\s?(\d\d\d)\s?(\d\d)/
+    , /\(?(\d\d\d)\)?\s?(\d\d\d)\s?(\d\d)\s?(\d\d)/];
   constructor(private ElemRef: ElementRef, private render: Renderer2, private customFormCom: CustomFormComponent) {}
 
 
 
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
-    if(event.key === 'Backspace') {
-      debugger
+    if (event.key === 'Backspace') {
+      // tslint:disable-next-line:no-debugger
       let positionCaret = this.ElemRef.nativeElement.selectionEnd;
       positionCaret--;
       console.log(typeof Number(event.target.value[positionCaret]));
-      if (event.target.value[positionCaret] === "-"){
+      if ((event.target.value[positionCaret] === ' ')  (event.target.value ) {
         event.preventDefault();
+        this.ElemRef.nativeElement.selectionEnd--;
       }
     }
 
@@ -38,26 +41,25 @@ export class CustomInputDirective {
       return;
     }
 
-    event.target.value = this.valueInput.replace(/^(\d{3})/, '($1) ');
-    if(event.target.value.length >= 7){
-      event.target.value = this.valueInput.replace(/\s(\d{3})(\d{2})/, ' $1-$2-');
+    if (this.valueInput.length <= 3) {
+      this.valueInput = this.valueInput.replace(this.mask[0], '($1)');
+      console.log(this.valueInput.replace(this.mask[0], '($1)'));
+    } else if (this.valueInput.length <= 8) {
+      this.valueInput = this.valueInput.replace(this.mask[1], '($1) $2');
+      console.log(this.valueInput);
+    } else if (this.valueInput.length <= 11) {
+      this.valueInput = this.valueInput.replace(this.mask[2], '($1) $2 $3 ');
+      console.log(this.valueInput);
     }
 
-    // if (event.target.value.length === (this.customFormCom.findCountry.length + this.defaultCharBrackets)) {
-    //   let valueInput = event.target.value;
-
-      // let valueInput = event.target.value.split('');
-      // valueInput = valueInput.splice(this.customFormCom.findCountry.length, this.customFormCom.findCountry.length +
-      //   this.defaultCharBrackets);
-      // console.log(valueInput);
-      // // valueInput.unshift(' (');
-      // valueInput.push(') ');
-      // valueInput = valueInput.join('');
-      // event.target.value = this.customFormCom.findCountry + valueInput;
+    // if (this.valueInput.match(this.mask[0])) {
+    //   debugger;
+    //   console.log(this.valueInput.replace(this.mask[0], '($1)'));
+    //   event.target.value = this.valueInput.replace(this.mask[0], '($1)');
     // }
-    // if(event.key === 'Backspace'){
-    //   event.preventDefault();
-    //   event.target.value = event.target.value.substr(0, (event.target.value.length));
+    // if (this.valueInput.match(this.mask[1])) {
+    //   console.log(this.valueInput.replace(this.mask[1], '-$2'));
+    //   event.target.value = this.valueInput.replace(this.mask[1], '-$2');
     // }
 
     const current: string = this.ElemRef.nativeElement.value;
@@ -65,5 +67,6 @@ export class CustomInputDirective {
     if (next && !String(next).match(this.regex[this.numbers]) || (event.target.value.length > 14)) {
       event.preventDefault();
     }
+    event.target.value = this.valueInput;
   }
 }
