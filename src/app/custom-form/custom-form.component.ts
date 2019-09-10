@@ -30,6 +30,8 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
     testInput: new FormControl('', [Validators.required, Validators.pattern('[0-9]{10}')])
   });
 
+  private value: any;
+
   constructor(private countryService: CountryService) { }
 
   @Input() defaultCountry = '';
@@ -37,17 +39,8 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   public countries = [];
   private idCountry: number;
   public findCountry: any;
-
-  set value(val) {
-    // this.numberForm.get('phoneNumber').valueChanges.subscribe(value => {
-    //   this.idCountry = this.numberForm.get('countryId').value;
-    //   console.log(this.findCountry.length);
-    //   if(value.length < this.findCountry.length) {
-    //     this.numberForm.get('phoneNumber').patchValue(this.countries[--this.idCountry].code);
-    //     this.onChange = value;
-    //   }
-    // })
-  }
+  public regexp = [];
+  public replaceVal = [];
 
   ngOnInit() {
 
@@ -57,6 +50,8 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
         this.countries.find(i => {
           if (i.code === this.defaultCountry) {
             this.numberForm.get('countryCode').patchValue(i.code);
+            this.regexp = i.regexp.split(', ');
+            this.replaceVal = i.replaceVal.split(', ');
           }
         });
       });
@@ -66,7 +61,13 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       for (const country of this.countries) {
         if (country.code === value) {
           this.findCountry = country.dial_code;
-          // this.numberForm.get('phoneNumber').patchValue(country.dial_code);
+          if(country.regexp){
+            this.regexp = country.regexp.split(', ');
+          }
+          if(country.replaceVal){
+            this.replaceVal = country.replaceVal.split(', ');
+          }
+          this.numberForm.get('phoneNumber').patchValue('');
         }
       }
     });
@@ -76,7 +77,6 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       if (value.length < this.findCountry.length) {
         this.countries.find(i => {
           if (i.code === this.idCountry) {
-            // this.numberForm.get('phoneNumber').patchValue(i.dial_code);
             this.onChange = value;
           }
         });
