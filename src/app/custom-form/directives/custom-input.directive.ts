@@ -27,11 +27,34 @@ export class CustomInputDirective {
         event.preventDefault();
         this.ElemRef.nativeElement.selectionEnd--;
       } else if(((positionCaret+1) !== event.target.value.length) && (event.target.value[positionCaret] !== ' ')) {
-        let tempLength = tempValueInput.length-1;
-        for (let z = tempLength; z > positionCaret; z--){
-          debugger
-          let y = z;
-          tempValueInput[z] = tempValueInput[--y];
+        let tempLength = tempValueInput.length;
+        let count=0;
+        for (let i = 0; i < tempLength ; i++){
+          let y = i;
+          if(i >= (positionCaret-1)){
+            if ((tempValueInput[i] === ')') && (tempValueInput[(y+1)]===' ')) {
+              count+=2;
+              i++;
+            } else if ((tempValueInput[i] === '(') || (tempValueInput[(y+1)]==='(')) {
+              count++;
+            } else if((tempValueInput[i] === ' ') || (tempValueInput[(y+1)] ===' ')){
+              count++
+            } else if ((tempValueInput[i] === '-') || (tempValueInput[(y+1)]==='-')) {
+              count++;
+            } else if ((tempValueInput[i] === ')') || (tempValueInput[(y+1)]===')')) {
+              count++;
+            } else {
+              if(count > 0){
+                tempValueInput[(i-count)] = tempValueInput[(i-count)].replace(tempValueInput[(i-count)], tempValueInput[y]);
+                count=0;
+              } else {
+                tempValueInput[i] = tempValueInput[i].replace(tempValueInput[i], tempValueInput[++y]);
+              }
+            }
+          }
+          if(i === tempValueInput.length-1){
+            tempValueInput.splice(tempValueInput.length-1, 1);
+          }
           console.log(tempValueInput);
         }
         event.preventDefault();
