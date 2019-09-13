@@ -19,64 +19,77 @@ export class CustomInputDirective {
 
 
   @HostListener('keydown', ['$event']) onKeyDown(event) {
+    this.valueInput = event.target.value;
+    let positionCaret = this.ElemRef.nativeElement.selectionEnd;
+    let tempValueInput = event.target.value.split('');
+    let tempLength = tempValueInput.length;
 
     if (event.key === 'Backspace') {
-      let positionCaret = this.ElemRef.nativeElement.selectionEnd;
-      let tempValueInput = event.target.value.split('');
+      //удаление
       if ((event.target.value[(positionCaret-1)] === ' ') && ((positionCaret+1) !== event.target.value.length)){
         event.preventDefault();
         this.ElemRef.nativeElement.selectionEnd--;
-      } else if(((positionCaret+1) !== event.target.value.length) && (event.target.value[positionCaret] !== ' ')) {
-        let tempLength = tempValueInput.length;
-        let count=0;
-        for (let i = 0; i < tempLength ; i++){
-          let y = i;
-          if(i >= (positionCaret-1)){
-            if ((tempValueInput[i] === ')') && (tempValueInput[(y+1)]===' ')) {
-              count+=2;
-              i++;
-            } else if ((tempValueInput[i] === '(') || (tempValueInput[(y+1)]==='(')) {
-              count++;
-            } else if((tempValueInput[i] === ' ') || (tempValueInput[(y+1)] ===' ')){
-              count++
-            } else if ((tempValueInput[i] === '-') || (tempValueInput[(y+1)]==='-')) {
-              count++;
-            } else if ((tempValueInput[i] === ')') || (tempValueInput[(y+1)]===')')) {
-              count++;
-            } else {
-              if(count > 0){
-                tempValueInput[(i-count)] = tempValueInput[(i-count)].replace(tempValueInput[(i-count)], tempValueInput[y]);
-                count=0;
-              } else {
-                tempValueInput[i] = tempValueInput[i].replace(tempValueInput[i], tempValueInput[++y]);
+      } else if(((positionCaret+1) !== event.target.value.length) && (event.target.value[(positionCaret-1)] !== ' ')) {
+        for (let i = 0; i < tempLength ; i++) {
+          if ((i >= (positionCaret-1)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))){
+            let y = i;
+            for (let j = ++y; j < tempLength; j++){
+              if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0'))  {
+                tempValueInput[i] = tempValueInput[i].replace(tempValueInput[i], tempValueInput[j]);
+                break;
               }
             }
           }
           if(i === tempValueInput.length-1){
             tempValueInput.splice(tempValueInput.length-1, 1);
           }
-          console.log(tempValueInput);
         }
+        event.target.value = tempValueInput.join('');
+        this.ElemRef.nativeElement.selectionStart = positionCaret--;
+        this.ElemRef.nativeElement.selectionEnd = positionCaret--;
         event.preventDefault();
       }
     }
-    this.valueInput = event.target.value;
+
     if (this.specialKeys[this.numbers].indexOf(event.key) !== -1) {
       return;
     }
 
     if((/\D/.test(event.key)) || (event.target.value.length === 15)){
       event.preventDefault();
+    } else {
+      if(positionCaret < event.target.value.length-1){
+        debugger
+        let tempVal = event.key;
+        for ( let i = 0; i < tempLength ; i++ ) {
+          if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))){
+            let y = i;
+            let temp;
+            for (let j = ++y; j < tempLength; j++){
+              temp = tempValueInput[j];
+              if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0'))  {
+
+                break;
+              }
+            }
+          }
+          console.log(tempValueInput);
+          if(i === tempValueInput.length-1){
+            tempValueInput[positionCaret].replace(positionCaret, tempVal);
+          }
+        }
+        event.preventDefault();
+      }
     }
 
     let replaceVal = this.customFormCom.replaceVal;
     let mask = this.customFormCom.regexp;
-    this.maskInput(mask,replaceVal,event);
+    this.maskInput(mask,replaceVal);
     event.target.value = this.valueInput;
   }
 
 
-  maskInput(mask,replaceVal,e) {
+  maskInput(mask,replaceVal) {
     for (let i = 0; i < mask.length; i++) {
       if (this.valueInput.match(RegExp(mask[i]))) {
         this.valueInput = this.valueInput.replace(RegExp(mask[i]), replaceVal[i]);
