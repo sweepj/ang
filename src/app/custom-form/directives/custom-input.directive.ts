@@ -21,8 +21,8 @@ export class CustomInputDirective {
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
-    const tempValueInput = event.target.value.split('');
-    const tempLength = tempValueInput.length;
+    let tempValueInput = event.target.value.split('');
+    let tempLength = tempValueInput.length;
 
     if (event.key === 'Backspace') {
       // удаление
@@ -60,14 +60,19 @@ export class CustomInputDirective {
     } else {
       if (positionCaret < event.target.value.length - 1 ) {
         let tempVal = event.key;
-        for ( let i = 0; i < tempLength ; i++ ) {
+        for ( let i = --tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
             let temp;
-            for (let j = ++y; j < tempLength; j++) {
+            for (let j = ++y; j > 0; j--) {
+              debugger
               temp = tempValueInput[j];
-              if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0'))  {
-
+              if (y === tempLength) {
+                tempValueInput.push(temp);
+                break;
+              }
+              if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0')) {
+                tempValueInput[j] = tempValueInput[j].replace(tempValueInput[j], tempValueInput[i]);
                 break;
               }
             }
