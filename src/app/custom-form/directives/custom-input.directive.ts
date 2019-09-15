@@ -21,27 +21,27 @@ export class CustomInputDirective {
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
-    let tempValueInput = event.target.value.split('');
-    let tempLength = tempValueInput.length;
+    const tempValueInput = event.target.value.split('');
+    const tempLength = tempValueInput.length;
 
     if (event.key === 'Backspace') {
-      //удаление
-      if ((event.target.value[(positionCaret-1)] === ' ') && ((positionCaret+1) !== event.target.value.length)){
+      // удаление
+      if ((event.target.value[(positionCaret - 1)] === ' ') && ((positionCaret + 1) !== event.target.value.length)) {
         event.preventDefault();
         this.ElemRef.nativeElement.selectionEnd--;
-      } else if(((positionCaret+1) !== event.target.value.length) && (event.target.value[(positionCaret-1)] !== ' ')) {
+      } else if (((positionCaret + 1) !== event.target.value.length) && (event.target.value[(positionCaret - 1)] !== ' ')) {
         for (let i = 0; i < tempLength ; i++) {
-          if ((i >= (positionCaret-1)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))){
+          if ((i >= (positionCaret - 1)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
-            for (let j = ++y; j < tempLength; j++){
+            for (let j = ++y; j < tempLength; j++) {
               if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0'))  {
                 tempValueInput[i] = tempValueInput[i].replace(tempValueInput[i], tempValueInput[j]);
                 break;
               }
             }
           }
-          if(i === tempValueInput.length-1){
-            tempValueInput.splice(tempValueInput.length-1, 1);
+          if (i === tempValueInput.length - 1) {
+            tempValueInput.splice(tempValueInput.length - 1, 1);
           }
         }
         event.target.value = tempValueInput.join('');
@@ -55,17 +55,16 @@ export class CustomInputDirective {
       return;
     }
 
-    if((/\D/.test(event.key)) || (event.target.value.length === 15)){
+    if ((/\D/.test(event.key)) || (event.target.value.length === 15)) {
       event.preventDefault();
     } else {
-      if(positionCaret < event.target.value.length-1){
-        debugger
+      if (positionCaret < event.target.value.length - 1 ) {
         let tempVal = event.key;
         for ( let i = 0; i < tempLength ; i++ ) {
-          if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))){
+          if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
             let temp;
-            for (let j = ++y; j < tempLength; j++){
+            for (let j = ++y; j < tempLength; j++) {
               temp = tempValueInput[j];
               if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0'))  {
 
@@ -74,7 +73,7 @@ export class CustomInputDirective {
             }
           }
           console.log(tempValueInput);
-          if(i === tempValueInput.length-1){
+          if (i === tempValueInput.length - 1) {
             tempValueInput[positionCaret].replace(positionCaret, tempVal);
           }
         }
@@ -84,12 +83,12 @@ export class CustomInputDirective {
 
     let replaceVal = this.customFormCom.replaceVal;
     let mask = this.customFormCom.regexp;
-    this.maskInput(mask,replaceVal);
+    this.maskInput(mask, replaceVal);
     event.target.value = this.valueInput;
   }
 
 
-  maskInput(mask,replaceVal) {
+  maskInput(mask, replaceVal) {
     for (let i = 0; i < mask.length; i++) {
       if (this.valueInput.match(RegExp(mask[i]))) {
         this.valueInput = this.valueInput.replace(RegExp(mask[i]), replaceVal[i]);
