@@ -60,32 +60,36 @@ export class CustomInputDirective {
     } else {
       if (positionCaret < event.target.value.length - 1 ) {
         let tempVal = event.key;
+        let lastPositionReplace;
         for ( let i = --tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
             let temp;
-            for (let j = ++y; j > 0; j--) {
+            for (let j = ++y; j <= event.target.value.length; j++) {
               debugger
-              temp = tempValueInput[j];
-              if (y === tempLength) {
+              temp = tempValueInput[i];
+              if (y === event.target.value.length) {
                 tempValueInput.push(temp);
                 break;
               }
               if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0')) {
                 tempValueInput[j] = tempValueInput[j].replace(tempValueInput[j], tempValueInput[i]);
+                lastPositionReplace = j;
                 break;
               }
             }
           }
-          console.log(tempValueInput);
-          if (i === tempValueInput.length - 1) {
-            tempValueInput[positionCaret].replace(positionCaret, tempVal);
+          if ((i === positionCaret) && (+tempValueInput[positionCaret] / +tempValueInput[positionCaret]) || (tempValueInput[positionCaret] === '0')) {
+            tempValueInput[positionCaret] = tempValueInput[positionCaret].replace(tempValueInput[positionCaret], tempVal);
+          } else {
+            event.preventDefault();
           }
         }
+        console.log(tempValueInput);
+        this.valueInput = tempValueInput.join('');
         event.preventDefault();
       }
     }
-
     let replaceVal = this.customFormCom.replaceVal;
     let mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);

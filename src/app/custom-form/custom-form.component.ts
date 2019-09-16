@@ -26,8 +26,7 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl('',  [Validators.required,
-      Validators.minLength(12)]),
-    testInput: new FormControl('', [Validators.required, Validators.pattern('[0-9]{10}')])
+      Validators.minLength(12)])
   });
 
   private value: any;
