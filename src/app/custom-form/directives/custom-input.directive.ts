@@ -13,7 +13,6 @@ export class CustomInputDirective {
   };
 
   private valueInput;
-  private defaultCharBrackets = 3;
   constructor(private ElemRef: ElementRef, private render: Renderer2, private customFormCom: CustomFormComponent) {}
 
 
@@ -26,7 +25,7 @@ export class CustomInputDirective {
 
     if (event.key === 'Backspace') {
       // удаление
-      if ((event.target.value[(positionCaret - 1)] === ' ') && ((positionCaret + 1) !== event.target.value.length)) {
+      if ((event.target.value[(positionCaret - 1)] === ' ') && ((positionCaret) !== event.target.value.length)) {
         event.preventDefault();
         this.ElemRef.nativeElement.selectionEnd--;
       } else if (((positionCaret + 1) !== event.target.value.length) && (event.target.value[(positionCaret - 1)] !== ' ')) {
@@ -65,12 +64,10 @@ export class CustomInputDirective {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
             let temp;
-            for (let j = y++; j <= event.target.value.length; j++) {
-              debugger
-              temp = tempValueInput[i];
+            for (let j = ++y; j <= event.target.value.length; j++) {
+              temp = tempValueInput[y];
               if (y === event.target.value.length) {
                 tempValueInput.push(temp);
-                break;
               }
               if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0')) {
                 tempValueInput[j] = tempValueInput[j].replace(tempValueInput[j], tempValueInput[i]);
@@ -78,31 +75,32 @@ export class CustomInputDirective {
               }
             }
           }
-          // tslint:disable-next-line:max-line-length
-          if ((i === positionCaret) && (+tempValueInput[positionCaret] / +tempValueInput[positionCaret]) || (tempValueInput[positionCaret] === '0')) {
-            tempValueInput[positionCaret] = tempValueInput[positionCaret].replace(tempValueInput[positionCaret], tempVal);
-          } else {
-            event.preventDefault();
-          }
         }
-        console.log(tempValueInput);
+        tempValueInput.splice(positionCaret, 1);
+        this.ElemRef.nativeElement.selectionEnd = positionCaret;
         this.valueInput = tempValueInput.join('');
         event.preventDefault();
       }
     }
     const replaceVal = this.customFormCom.replaceVal;
-    const mask = this.customFormCom.regexp;
+    let mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);
     event.target.value = this.valueInput;
   }
 
 
   maskInput(mask, replaceVal) {
+    let glueRegular = mask.reduce((prev, cur) => {
+      let glueArrayElement = prev + cur;
+      console.log(glueArrayElement);
+      prev.push(glueArrayElement);
+      return prev;
+    },[]);
+    console.log(glueRegular);
     for (let i = 0; i < mask.length; i++) {
-      if (this.valueInput.match(RegExp(mask[i]))) {
+      if (this.valueInput.match(RegExp(glueRegular))) {
         this.valueInput = this.valueInput.replace(RegExp(mask[i]), replaceVal[i]);
       }
     }
   }
-
 }
