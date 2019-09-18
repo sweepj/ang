@@ -90,16 +90,17 @@ export class CustomInputDirective {
 
 
   maskInput(mask, replaceVal) {
-    let glueRegular = mask.reduce((prev, cur) => {
-      let glueArrayElement = prev + cur;
-      console.log(glueArrayElement);
-      prev.push(glueArrayElement);
-      return prev;
-    },[]);
-    console.log(glueRegular);
+    let glueArrayRegular = [];
+    mask.forEach((item, index) => {
+      if (index > 0) {
+        glueArrayRegular.push(glueArrayRegular[index-1] + item);
+      } else {
+        glueArrayRegular.push(item);
+      }
+    });
     for (let i = 0; i < mask.length; i++) {
-      if (this.valueInput.match(RegExp(glueRegular))) {
-        this.valueInput = this.valueInput.replace(RegExp(mask[i]), replaceVal[i]);
+      if (this.valueInput.match(RegExp(glueArrayRegular[i]))) {
+        this.valueInput = this.valueInput.replace(RegExp(glueArrayRegular[i]), replaceVal[i]);
       }
     }
   }
