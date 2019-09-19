@@ -20,29 +20,26 @@ import {CountryService} from '../services/country.service';
 
 export class CustomFormComponent implements OnInit, ControlValueAccessor {
 
-  onTouched: () => void;
-  onChange: (value: any) => void;
-
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl('',  [Validators.required,
       Validators.minLength(12)])
   });
 
+  onTouched: () => void;
+  private onChange = (value: any) => {};
   private value: any;
+  public countries = [];
+  private valueCountryCode: string;
+  public findCountry: any;
+  public regexp = [];
+  public replaceVal = [];
 
   constructor(private countryService: CountryService) { }
 
   @Input() defaultCountry = '';
 
-  public countries = [];
-  private idCountry: number;
-  public findCountry: any;
-  public regexp = [];
-  public replaceVal = [];
-
   ngOnInit() {
-
     this.countryService.getJSON()
       .subscribe(value => {
         this.countries = value;
@@ -71,16 +68,23 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       }
     });
 
-    this.numberForm.get('phoneNumber').valueChanges.subscribe(value => {
-      this.idCountry = this.numberForm.get('countryCode').value;
-      if (value.length < this.findCountry.length) {
-        this.countries.find(i => {
-          if (i.code === this.idCountry) {
-            this.onChange = value;
-          }
-        });
-      }
-    });
+    this.numberForm.get('phoneNumber').valueChanges
+      .subscribe(value => {
+        this.clearNumberExcess(value);
+        console.log(value);
+        this.valueCountryCode = this.numberForm.get('countryCode').value;
+        if (value.length < this.findCountry.length) {
+          this.countries.find(i => {
+            if (i.code === this.valueCountryCode) {
+            }
+          });
+        }
+      });
+  }
+
+  clearNumberExcess(value) {
+    value = value.replace(/\D/g, '');
+    this.onChange(value);
   }
 
   registerOnChange(fn: any): void {
@@ -97,5 +101,6 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   writeValue(value: any): void {
     this.value = value;
   }
+
 
 }

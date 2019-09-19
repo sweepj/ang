@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {FormGroup, FormControl, Validator, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
@@ -9,8 +9,14 @@ import {FormGroup, FormControl, Validator, Validators, ControlValueAccessor, NG_
 
 export class AppComponent implements OnInit {
 
-  appState = 'test';
+  appState = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
+
+  onClick(){
+    console.log(this.appState);
+  }
 
 }

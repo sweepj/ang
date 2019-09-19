@@ -24,7 +24,7 @@ export class CustomInputDirective {
     let tempLength = tempValueInput.length;
 
     if (event.key === 'Backspace') {
-      // удаление
+      // удалениe
       if ((event.target.value[(positionCaret - 1)] === ' ') && ((positionCaret) !== event.target.value.length)) {
         event.preventDefault();
         this.ElemRef.nativeElement.selectionEnd--;
@@ -60,13 +60,14 @@ export class CustomInputDirective {
       if (positionCaret < event.target.value.length - 1 ) {
         const tempVal = event.key;
         tempValueInput.splice(positionCaret, 0, tempVal);
-        for ( let i = --tempLength; i > 0 ; i-- ) {
+      debugger
+        for ( let i = tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
             let temp;
             for (let j = ++y; j <= event.target.value.length; j++) {
-              temp = tempValueInput[y];
-              if (y === event.target.value.length) {
+              if (y > event.target.value.length) {
+                temp = tempValueInput[(y-1)];
                 tempValueInput.push(temp);
               }
               if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0')) {
@@ -82,6 +83,7 @@ export class CustomInputDirective {
         event.preventDefault();
       }
     }
+
     const replaceVal = this.customFormCom.replaceVal;
     let mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);
