@@ -20,8 +20,8 @@ export class CustomInputDirective {
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
-    let tempValueInput = event.target.value.split('');
-    let tempLength = tempValueInput.length;
+    const tempValueInput = event.target.value.split('');
+    const tempLength = tempValueInput.length;
 
     if (event.key === 'Backspace') {
       // удалениe
@@ -60,15 +60,16 @@ export class CustomInputDirective {
       if (positionCaret < event.target.value.length - 1 ) {
         const tempVal = event.key;
         tempValueInput.splice(positionCaret, 0, tempVal);
-      debugger
+        debugger;
         for ( let i = tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
             let temp;
-            for (let j = ++y; j <= event.target.value.length; j++) {
-              if (y > event.target.value.length) {
-                temp = tempValueInput[(y-1)];
+            for (let j = ++y; j <= (event.target.value.length + 1); j++) {
+              if ((y - 1) === event.target.value.length) {
+                temp = tempValueInput[(y - 1)];
                 tempValueInput.push(temp);
+                break;
               }
               if ((+tempValueInput[j] / +tempValueInput[j]) || (tempValueInput[j] === '0')) {
                 tempValueInput[j] = tempValueInput[j].replace(tempValueInput[j], tempValueInput[i]);
@@ -85,17 +86,17 @@ export class CustomInputDirective {
     }
 
     const replaceVal = this.customFormCom.replaceVal;
-    let mask = this.customFormCom.regexp;
+    const mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);
     event.target.value = this.valueInput;
   }
 
 
   maskInput(mask, replaceVal) {
-    let glueArrayRegular = [];
+    const glueArrayRegular = [];
     mask.forEach((item, index) => {
       if (index > 0) {
-        glueArrayRegular.push(glueArrayRegular[index-1] + item);
+        glueArrayRegular.push(glueArrayRegular[index - 1] + item);
       } else {
         glueArrayRegular.push(item);
       }

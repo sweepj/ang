@@ -20,6 +20,8 @@ import {CountryService} from '../services/country.service';
 
 export class CustomFormComponent implements OnInit, ControlValueAccessor {
 
+  constructor(private countryService: CountryService) { }
+
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl('',  [Validators.required,
@@ -27,7 +29,6 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   });
 
   onTouched: () => void;
-  private onChange = (value: any) => {};
   private value: any;
   public countries = [];
   private valueCountryCode: string;
@@ -35,9 +36,8 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   public regexp = [];
   public replaceVal = [];
 
-  constructor(private countryService: CountryService) { }
-
   @Input() defaultCountry = '';
+  private onChange = (value: any) => {};
 
   ngOnInit() {
     this.countryService.getJSON()
@@ -57,10 +57,10 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
       for (const country of this.countries) {
         if (country.code === value) {
           this.findCountry = country.dial_code;
-          if(country.regexp){
+          if (country.regexp) {
             this.regexp = country.regexp.split(', ');
           }
-          if(country.replaceVal){
+          if (country.replaceVal) {
             this.replaceVal = country.replaceVal.split(', ');
           }
           this.numberForm.get('phoneNumber').patchValue('');
