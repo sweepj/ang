@@ -29,6 +29,7 @@ export class CustomInputDirective {
         event.preventDefault();
         this.ElemRef.nativeElement.selectionEnd--;
       } else if (((positionCaret + 1) !== event.target.value.length) && (event.target.value[(positionCaret - 1)] !== ' ')) {
+        event.preventDefault();
         for (let i = 0; i < tempLength ; i++) {
           if ((i >= (positionCaret - 1)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
@@ -46,7 +47,6 @@ export class CustomInputDirective {
         event.target.value = tempValueInput.join('');
         this.ElemRef.nativeElement.selectionStart = positionCaret--;
         this.ElemRef.nativeElement.selectionEnd = positionCaret--;
-        event.preventDefault();
       }
     }
 
@@ -58,9 +58,9 @@ export class CustomInputDirective {
       event.preventDefault();
     } else {
       if (positionCaret < event.target.value.length - 1 ) {
+        event.preventDefault();
         const tempVal = event.key;
         tempValueInput.splice(positionCaret, 0, tempVal);
-        debugger;
         for ( let i = tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
             let y = i;
@@ -81,7 +81,6 @@ export class CustomInputDirective {
         tempValueInput.splice(positionCaret, 1);
         this.ElemRef.nativeElement.selectionEnd = positionCaret;
         this.valueInput = tempValueInput.join('');
-        event.preventDefault();
       }
     }
 
@@ -91,6 +90,12 @@ export class CustomInputDirective {
     event.target.value = this.valueInput;
   }
 
+  simpleEvent() {
+    const event = new CustomEvent('emptyEvent', {
+      detail:{
+      }
+    });
+  }
 
   maskInput(mask, replaceVal) {
     const glueArrayRegular = [];

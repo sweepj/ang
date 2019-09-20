@@ -29,12 +29,16 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   });
 
   onTouched: () => void;
-  private value: any;
+  private val: any;
   public countries = [];
   private valueCountryCode: string;
   public findCountry: any;
   public regexp = [];
   public replaceVal = [];
+
+  set value(val){
+    this.val = val;
+  }
 
   @Input() defaultCountry = '';
   private onChange = (value: any) => {};
@@ -71,7 +75,7 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
         this.clearNumberExcess(value);
-        console.log(value);
+        console.log(this.val);
         this.valueCountryCode = this.numberForm.get('countryCode').value;
         if (value.length < this.findCountry.length) {
           this.countries.find(i => {
@@ -101,6 +105,5 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   writeValue(value: any): void {
     this.value = value;
   }
-
 
 }

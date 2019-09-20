@@ -9,7 +9,7 @@ import {FormGroup, FormControl, Validator, Validators, ControlValueAccessor, NG_
 
 export class AppComponent implements OnInit {
 
-  appState = '';
+  appState = '+79787701284';
 
   ngOnInit(): void {
 
