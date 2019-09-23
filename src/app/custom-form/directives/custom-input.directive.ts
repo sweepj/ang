@@ -83,21 +83,29 @@ export class CustomInputDirective {
         this.valueInput = tempValueInput.join('');
       }
     }
+    const replaceVal = this.customFormCom.replaceVal;
+    const mask = this.customFormCom.regexp;
+    this.maskInput(mask, replaceVal);
+    event.target.value = this.valueInput;
+    this.render.setStyle(this.ElemRef.nativeElement, 'color', 'black');
+  }
 
+  @HostListener('DOMContentLoaded', ['$event']) onFocus(event){
+    this.valueInput = event.target.value;
     const replaceVal = this.customFormCom.replaceVal;
     const mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);
     event.target.value = this.valueInput;
   }
-
-  simpleEvent() {
-    const event = new CustomEvent('emptyEvent', {
-      detail:{
-      }
-    });
-  }
+  // simpleEvent() {
+  //   const event = new CustomEvent('emptyEvent', {
+  //     detail:{
+  //     }
+  //   });
+  // }
 
   maskInput(mask, replaceVal) {
+  debugger
     const glueArrayRegular = [];
     mask.forEach((item, index) => {
       if (index > 0) {

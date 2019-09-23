@@ -21,7 +21,6 @@ import {CountryService} from '../services/country.service';
 export class CustomFormComponent implements OnInit, ControlValueAccessor {
 
   constructor(private countryService: CountryService) { }
-
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl('',  [Validators.required,
@@ -29,19 +28,15 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   });
 
   onTouched: () => void;
-  private val: any;
+  private val = '';
   public countries = [];
   private valueCountryCode: string;
   public findCountry: any;
   public regexp = [];
   public replaceVal = [];
-
-  set value(val){
-    this.val = val;
-  }
+  private onChange = (value: any) => {};
 
   @Input() defaultCountry = '';
-  private onChange = (value: any) => {};
 
   ngOnInit() {
     this.countryService.getJSON()
@@ -75,20 +70,33 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
         this.clearNumberExcess(value);
-        console.log(this.val);
-        this.valueCountryCode = this.numberForm.get('countryCode').value;
-        if (value.length < this.findCountry.length) {
-          this.countries.find(i => {
-            if (i.code === this.valueCountryCode) {
-            }
-          });
+        if (value.length === 0) {
+          this.numberFromOutside(this.val);
         }
       });
   }
 
+
   clearNumberExcess(value) {
     value = value.replace(/\D/g, '');
     this.onChange(value);
+  }
+
+  numberFromOutside(numberFromOutside: string){
+    let countryDialCode, fullNumber;
+    if (this.val.length > 0) {
+      countryDialCode = numberFromOutside.slice(0,2);
+      this.countries.find(index => {
+        if(countryDialCode === index.dial_code) {
+          fullNumber = numberFromOutside.slice(2, numberFromOutside.length);
+        }
+      });
+      this.numberForm.get('phoneNumber').patchValue(fullNumber);
+    }
+  }
+
+  writeValue(value: string): void {
+    this.val = value;
   }
 
   registerOnChange(fn: any): void {
@@ -102,8 +110,6 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   setDisabledState?(isDisabled: boolean): void {
   }
 
-  writeValue(value: any): void {
-    this.value = value;
-  }
+
 
 }
