@@ -1,6 +1,7 @@
 import {Directive, ElementRef, forwardRef, HostListener, Input, Renderer2} from '@angular/core';
 import {CustomFormComponent} from '../custom-form.component';
 
+// @ts-ignore
 @Directive({
   selector: '[appCustomInput]'
 })
@@ -9,20 +10,17 @@ export class CustomInputDirective {
   @Input('numbers') numbers: string;
 
   private specialKeys = {
-    number: ['Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight']
+    number: ['Backspace', 'Tab', 'End', 'Home', 'ArrowLeft', 'ArrowRight', 'Ctrl']
   };
 
   private valueInput;
   constructor(private ElemRef: ElementRef, private render: Renderer2, private customFormCom: CustomFormComponent) {}
-
-
 
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     this.valueInput = event.target.value;
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
     const tempValueInput = event.target.value.split('');
     const tempLength = tempValueInput.length;
-
     if (event.key === 'Backspace') {
       // удалениe
       if ((event.target.value[(positionCaret - 1)] === ' ') && ((positionCaret) !== event.target.value.length)) {
@@ -44,7 +42,7 @@ export class CustomInputDirective {
             tempValueInput.splice(tempValueInput.length - 1, 1);
           }
         }
-        event.target.value = tempValueInput.join('');
+        this.customFormCom.numberForm.get('phoneNumber').setValue(tempValueInput.join(''));
         this.ElemRef.nativeElement.selectionStart = positionCaret--;
         this.ElemRef.nativeElement.selectionEnd = positionCaret--;
       }
@@ -83,29 +81,16 @@ export class CustomInputDirective {
         this.valueInput = tempValueInput.join('');
       }
     }
+
     const replaceVal = this.customFormCom.replaceVal;
     const mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);
-    event.target.value = this.valueInput;
-    this.render.setStyle(this.ElemRef.nativeElement, 'color', 'black');
+    // event.target.value = this.valueInput;
+    this.customFormCom.numberForm.get('phoneNumber').setValue(this.valueInput);
   }
 
-  @HostListener('DOMContentLoaded', ['$event']) onFocus(event){
-    this.valueInput = event.target.value;
-    const replaceVal = this.customFormCom.replaceVal;
-    const mask = this.customFormCom.regexp;
-    this.maskInput(mask, replaceVal);
-    event.target.value = this.valueInput;
-  }
-  // simpleEvent() {
-  //   const event = new CustomEvent('emptyEvent', {
-  //     detail:{
-  //     }
-  //   });
-  // }
 
   maskInput(mask, replaceVal) {
-  debugger
     const glueArrayRegular = [];
     mask.forEach((item, index) => {
       if (index > 0) {

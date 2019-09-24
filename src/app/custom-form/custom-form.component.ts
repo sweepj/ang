@@ -1,10 +1,9 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, DoCheck, ElementRef, forwardRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CountryService} from '../services/country.service';
-
 
 @Component({
   selector: 'app-custom-form',
@@ -17,10 +16,14 @@ import {CountryService} from '../services/country.service';
   }]
 })
 
+export class CustomFormComponent implements
+  OnInit,
+  AfterViewChecked,
+  ControlValueAccessor{
 
-export class CustomFormComponent implements OnInit, ControlValueAccessor {
+  constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
 
-  constructor(private countryService: CountryService) { }
+  @Input() defaultCountry = '';
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl('',  [Validators.required,
@@ -36,7 +39,6 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   public replaceVal = [];
   private onChange = (value: any) => {};
 
-  @Input() defaultCountry = '';
 
   ngOnInit() {
     this.countryService.getJSON()
@@ -70,10 +72,8 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
         this.clearNumberExcess(value);
-        if (value.length === 0) {
-          this.numberFromOutside(this.val);
-        }
       });
+    this.numberFromOutside(this.val);
   }
 
 
@@ -92,6 +92,8 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
         }
       });
       this.numberForm.get('phoneNumber').patchValue(fullNumber);
+      //исскуственный вызов события нажатие на клавишу
+      this.elemRef.nativeElement.querySelector('#inputPhoneNumber').dispatchEvent(new KeyboardEvent('keydown'))
     }
   }
 
@@ -110,6 +112,7 @@ export class CustomFormComponent implements OnInit, ControlValueAccessor {
   setDisabledState?(isDisabled: boolean): void {
   }
 
-
-
+  ngAfterViewChecked(): void {
+    console.log('1');
+  }
 }
