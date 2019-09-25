@@ -18,8 +18,7 @@ import {CountryService} from '../services/country.service';
 
 export class CustomFormComponent implements
   OnInit,
-  AfterViewChecked,
-  ControlValueAccessor{
+  ControlValueAccessor {
 
   constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
 
@@ -40,7 +39,7 @@ export class CustomFormComponent implements
   private onChange = (value: any) => {};
 
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.countryService.getJSON()
       .subscribe(value => {
         this.countries = value;
@@ -73,7 +72,6 @@ export class CustomFormComponent implements
       .subscribe(value => {
         this.clearNumberExcess(value);
       });
-    this.numberFromOutside(this.val);
   }
 
 
@@ -110,9 +108,5 @@ export class CustomFormComponent implements
   }
 
   setDisabledState?(isDisabled: boolean): void {
-  }
-
-  ngAfterViewChecked(): void {
-    console.log('1');
   }
 }

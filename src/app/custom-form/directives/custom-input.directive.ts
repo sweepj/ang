@@ -61,11 +61,16 @@ export class CustomInputDirective {
         tempValueInput.splice(positionCaret, 0, tempVal);
         for ( let i = tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
+            debugger
             let y = i;
             let temp;
             for (let j = ++y; j <= (event.target.value.length + 1); j++) {
-              if ((y - 1) === event.target.value.length) {
-                temp = tempValueInput[(y - 1)];
+              if ((y === event.target.value.length) && ((+tempValueInput[y] / +tempValueInput[y]) || (tempValueInput[y] === '0'))) {
+                temp = tempValueInput[y];
+                tempValueInput.push(temp);
+                break;
+              } else if (((j-1) === event.target.value.length)){
+                temp = tempValueInput[i];
                 tempValueInput.push(temp);
                 break;
               }
