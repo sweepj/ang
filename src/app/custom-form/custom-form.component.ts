@@ -25,14 +25,13 @@ export class CustomFormComponent implements
   @Input() defaultCountry = '';
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
-    phoneNumber: new FormControl('',  [Validators.required,
+    phoneNumber: new FormControl(null,  [Validators.required,
       Validators.minLength(12)])
   });
 
   onTouched: () => void;
   private val = '';
   public countries = [];
-  private valueCountryCode: string;
   public findCountry: any;
   public regexp = [];
   public replaceVal = [];
@@ -50,6 +49,7 @@ export class CustomFormComponent implements
             this.replaceVal = i.replaceVal.split(', ');
           }
         });
+          this.numberFromOutside(this.val);
       });
 
     this.numberForm.get('countryCode').valueChanges
@@ -70,7 +70,7 @@ export class CustomFormComponent implements
 
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
-        this.clearNumberExcess(value);
+        this.clearNumberExcess(this.findCountry+value);
       });
   }
 
@@ -87,10 +87,10 @@ export class CustomFormComponent implements
       this.countries.find(index => {
         if(countryDialCode === index.dial_code) {
           fullNumber = numberFromOutside.slice(2, numberFromOutside.length);
+          this.numberForm.get('phoneNumber').patchValue(fullNumber);
         }
       });
-      this.numberForm.get('phoneNumber').patchValue(fullNumber);
-      //исскуственный вызов события нажатие на клавишу
+      // исскуственный вызов события нажатие на клавишу
       this.elemRef.nativeElement.querySelector('#inputPhoneNumber').dispatchEvent(new KeyboardEvent('keydown'))
     }
   }

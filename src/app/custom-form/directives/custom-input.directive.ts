@@ -21,6 +21,7 @@ export class CustomInputDirective {
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
     const tempValueInput = event.target.value.split('');
     const tempLength = tempValueInput.length;
+
     if (event.key === 'Backspace') {
       // удалениe
       if ((event.target.value[(positionCaret - 1)] === ' ') && ((positionCaret) !== event.target.value.length)) {
@@ -61,7 +62,6 @@ export class CustomInputDirective {
         tempValueInput.splice(positionCaret, 0, tempVal);
         for ( let i = tempLength; i > 0 ; i-- ) {
           if ((i >= (positionCaret)) && ((+tempValueInput[i] / +tempValueInput[i]) || (tempValueInput[i] === '0'))) {
-            debugger
             let y = i;
             let temp;
             for (let j = ++y; j <= (event.target.value.length + 1); j++) {
@@ -90,7 +90,6 @@ export class CustomInputDirective {
     const replaceVal = this.customFormCom.replaceVal;
     const mask = this.customFormCom.regexp;
     this.maskInput(mask, replaceVal);
-    // event.target.value = this.valueInput;
     this.customFormCom.numberForm.get('phoneNumber').setValue(this.valueInput);
   }
 
