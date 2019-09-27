@@ -51,7 +51,7 @@ export class CustomFormComponent implements
             this.maxLength = i.maxLength;
           }
         });
-          this.numberFromOutside(this.val);
+        this.numberFromOutside(this.val);
       });
 
     this.numberForm.get('countryCode').valueChanges

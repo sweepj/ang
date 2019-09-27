@@ -55,7 +55,8 @@ export class CustomInputDirective {
 
     if ((/\D/.test(event.key)) || (event.target.value.length === +this.customFormCom.maxLength)) {
       event.preventDefault();
-    } else {
+    } else if(positionCaret !== this.valueInput.length) {
+
       //   if (positionCaret < event.target.value.length - 1 ) {
       //     event.preventDefault();
       //     const tempVal = event.key;
@@ -104,11 +105,6 @@ export class CustomInputDirective {
       this.valueInput = this.valueInput.replace(/\D/g, '');
       this.maskInput(mask, replaceVal);
       this.customFormCom.numberForm.get('phoneNumber').setValue(this.valueInput);
-      if () {
-
-      }
-      // this.ElemRef.nativeElement.selectionStart = positionCaret;
-      // this.ElemRef.nativeElement.selectionEnd = positionCaret;
     }
     if (event.key === 'Backspace') {
       const replaceVal = this.customFormCom.replaceVal;
