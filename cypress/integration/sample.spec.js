@@ -34,7 +34,13 @@ describe('Firestarter', () => {
     cy.get('#inputPhoneNumber').type('812888');
     cy.get('button[type=submit]').should('be.disabled');
     cy.get('.text-danger').should('visible');
+  });
+  it('input number Israel', () => {
+    cy.get('#selectCountry').select('Israel', {
+      force: true
+    });
+    cy.get('#inputPhoneNumber').type('12345678');
+    // cy.get('button[type=submit]').should('be.disabled');
+    cy.get('.text-danger').should('not.visible');
   })
-
-
 });
