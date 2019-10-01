@@ -3,14 +3,17 @@
     "name":"Israel",
     "dial_code":"+972",
     "code":"IL",
-    "regexp": "\\(?(\\d{3})\\)?, \\s?(\\d{3}), \\s?(\\d{2}), \\s?(\\d{1,2})",
-    "replaceVal": "($1), ($1) $2, ($1) $2 $3, ($1) $2 $3 $4",
-    "maxLength" : "15"
+    "regexp": "\\(?(\\d{2})\\)?, \\s?(\\d{3}), \\-?(\\d{1,4})",
+    "replaceVal": "($1), ($1) $2, ($1) $2-$3",
+    "maxLength" : "13"
   },
   {
     "name":"Afghanistan",
     "dial_code":"+93",
-    "code":"AF"
+    "code":"AF",
+    "regexp": "\\(?(\\d{3})\\)?, \\s?(\\d{3}), \\s?(\\d{2}), \\s?(\\d{1,2})",
+    "replaceVal": "($1), ($1) $2, ($1) $2 $3, ($1) $2 $3 $4",
+    "maxLength" : "15"
   },
   {
     "name":"Albania",
@@ -456,11 +459,6 @@
     "name":"Ireland",
     "dial_code":"+353",
     "code":"IE"
-  },
-  {
-    "name":"Israel",
-    "dial_code":"+972",
-    "code":"IL"
   },
   {
     "name":"Italy",

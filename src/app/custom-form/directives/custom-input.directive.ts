@@ -16,9 +16,14 @@ export class CustomInputDirective {
   private valueInput;
   constructor(private ElemRef: ElementRef, private render: Renderer2, private customFormCom: CustomFormComponent) {}
 
+
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     if (this.specialKeys[this.numbers].indexOf(event.key) !== -1) {
       return;
+    }
+
+    if(event.ctrlKey && event.keyCode === 86) {
+      this.ElemRef.nativeElement.querySelector('#inputPhoneNumber').dispatchEvent(new ClipboardEvent('paste'))
     }
 
     if ((/\D/.test(event.key)) || (event.target.value.length === +this.customFormCom.maxLength)) {
@@ -26,7 +31,16 @@ export class CustomInputDirective {
     }
   }
 
-  @HostListener('keyup', ['$event']) onKeyup(event){
+  @HostListener('paste', ['$event']) onPaste(event) {
+    event.preventDefault();
+    let bufferData = event.clipboardData.getData('text/plain');
+    if (bufferData) {
+      this.customFormCom.numberFromOutside(bufferData);
+    }
+    this.customFormCom.numberFromOutside(bufferData);
+  }
+
+  @HostListener('keyup', ['$event']) onKeyup(event) {
     this.valueInput = event.target.value;
     let valueLastLength = this.valueInput.length;
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
@@ -38,7 +52,7 @@ export class CustomInputDirective {
       this.valueInput = this.valueInput.replace(/\D/g, '');
       this.maskInput(mask, replaceVal);
       this.customFormCom.numberForm.get('phoneNumber').setValue(this.valueInput);
-      if (positionCaret === valueLastLength){
+      if (positionCaret === valueLastLength) {
         positionCaret = this.ElemRef.nativeElement.selectionStart;
       }
       if ((positionCaret !== +this.customFormCom.maxLength)) {
@@ -55,13 +69,6 @@ export class CustomInputDirective {
       this.customFormCom.numberForm.get('phoneNumber').setValue(this.valueInput);
       this.ElemRef.nativeElement.selectionStart = positionCaret;
       this.ElemRef.nativeElement.selectionEnd = positionCaret;
-    }
-  }
-
-  checkPositionCaret(event, positionSave){
-    if ((positionSave !== event.target.value.length)) {
-      this.ElemRef.nativeElement.selectionStart = positionSave;
-      this.ElemRef.nativeElement.selectionEnd = positionSave;
     }
   }
 

@@ -23,11 +23,10 @@ export class CustomFormComponent implements
 
   constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
 
-  @Input() defaultCountry = '';
+  @Input() default;
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
-    phoneNumber: new FormControl(null,  [Validators.required,
-      Validators.minLength(12)])
+    phoneNumber: new FormControl(null,  [Validators.required])
   });
 
   onTouched: () => void;
@@ -36,7 +35,8 @@ export class CustomFormComponent implements
   public findCountry: any;
   public regexp = [];
   public replaceVal = [];
-  public maxLength: string;
+  public maxLength: number;
+  private autoSelectCountry = ["IL", "RU", "UA"];
   private onChange = (value: any) => {};
 
   ngOnInit(): void {
@@ -44,13 +44,14 @@ export class CustomFormComponent implements
       .subscribe(value => {
         this.countries = value;
         this.countries.find(i => {
-          if (i.code === this.defaultCountry) {
+          if (i.code === this.default.country) {
             this.numberForm.get('countryCode').patchValue(i.code);
             this.regexp = i.regexp.split(', ');
             this.replaceVal = i.replaceVal.split(', ');
             this.maxLength = i.maxLength;
           }
         });
+        console.log(this.default);
         this.numberFromOutside(this.val);
       });
 
@@ -61,7 +62,7 @@ export class CustomFormComponent implements
           this.findCountry = country.dial_code;
           country.regexp ? this.regexp = country.regexp.split(', ') : this.regexp = [];
           country.replaceVal ? this.replaceVal = country.replaceVal.split(', ') : this.replaceVal = [];
-          country.maxLength ? this.maxLength = country.maxLength : this.maxLength='';
+          country.maxLength ? this.maxLength = +country.maxLength : this.maxLength = this.default.minlen;
           this.numberForm.get('phoneNumber').patchValue('');
         }
       }
@@ -69,7 +70,7 @@ export class CustomFormComponent implements
 
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
-        this.clearNumberExcess(this.findCountry+value);
+        this.clearNumberExcess(this.findCountry + value);
       });
   }
 
@@ -84,7 +85,7 @@ export class CustomFormComponent implements
       this.countries.find(index => {
         countryDialCode = numberFromOutside.slice(0, (index.dial_code.length));
         if(countryDialCode === index.dial_code) {
-          let countrySelect = this.autoSelectCountryNumberFromOutside(["IL", "RU", "UA"], countryDialCode);
+          let countrySelect = this.autoSelectCountryNumberFromOutside(this.autoSelectCountry, countryDialCode);
           this.numberForm.get('countryCode').patchValue(countrySelect);
           fullNumber = numberFromOutside.slice(index.dial_code.length, numberFromOutside.length);
           this.numberForm.get('phoneNumber').patchValue(fullNumber);

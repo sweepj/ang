@@ -1,6 +1,5 @@
 <form autocomplete="off" action="#"
       [formGroup]="numberForm"
-      (ngSubmit)="onSubmit()"
 >
   <label>
     Select Country:
@@ -9,20 +8,17 @@
     </select>
   </label>
   <br>
-
   <div style="margin-top: 10px;">
     <label style="display: inline">
       Number phone:
     </label>
     <div id="dial_code">{{findCountry}}</div>
     <input type="text" id="inputPhoneNumber"
-           appCustomInput numbers="number" formControlName="phoneNumber" minlength="12">
-    <h5 [hidden]="!numberForm.get('phoneNumber').hasError('minlength')"
-        class="text-danger" >Invalid number</h5>
+           appCustomInput numbers="number" formControlName="phoneNumber"
+           minlength="{{maxLength}}">
   </div>
   <br>
   <button type="submit" [disabled]="!numberForm.valid">
     Click me!
   </button>
-<!--  <p> Test Input: {{this.numberForm.get('phoneNumber').value}}</p>-->
 </form>
