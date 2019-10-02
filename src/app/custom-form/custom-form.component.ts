@@ -1,4 +1,4 @@
-import {AfterViewChecked, AfterViewInit, Component, DoCheck, ElementRef, forwardRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges} from '@angular/core';
+import {Component, DoCheck, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
 import {HttpClient, HttpResponse} from '@angular/common/http';
@@ -24,6 +24,7 @@ export class CustomFormComponent implements
   constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
 
   @Input() default;
+  @Output() close = new EventEmitter<void>();
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl(null,  [Validators.required])
@@ -36,7 +37,8 @@ export class CustomFormComponent implements
   public regexp = [];
   public replaceVal = [];
   public maxLength: number;
-  private autoSelectCountry = ["IL", "RU", "UA"];
+  private autoSelectCountry = ["IL", "RU", "UA", "KZ"];
+  public triggerModal: boolean;
   private onChange = (value: any) => {};
 
   ngOnInit(): void {
@@ -81,10 +83,11 @@ export class CustomFormComponent implements
 
   numberFromOutside(numberFromOutside: string){
     let countryDialCode, fullNumber;
-    if (this.val.length > 0) {
+    if (numberFromOutside.length > 0) {
       this.countries.find(index => {
         countryDialCode = numberFromOutside.slice(0, (index.dial_code.length));
-        if(countryDialCode === index.dial_code) {
+        if (countryDialCode === index.dial_code) {
+          debugger
           let countrySelect = this.autoSelectCountryNumberFromOutside(this.autoSelectCountry, countryDialCode);
           this.numberForm.get('countryCode').patchValue(countrySelect);
           fullNumber = numberFromOutside.slice(index.dial_code.length, numberFromOutside.length);
@@ -97,11 +100,14 @@ export class CustomFormComponent implements
   }
 
   autoSelectCountryNumberFromOutside(array: Array<string>, dialCode: string): string {
+
     let countryIsFind = '';
     this.countries.find(index => {
       if (countryIsFind.length === 0) {
+
         array.some(i => {
           if ((i === index.code) && (dialCode === index.dial_code)) {
+          debugger
             countryIsFind = index.code;
           }
         })
@@ -109,6 +115,10 @@ export class CustomFormComponent implements
     });
     return String(countryIsFind);
   }
+
+  // closeModal(){
+  //   this.triggerModal = false;
+  // }
 
   writeValue(value: string): void {
     this.val = value;

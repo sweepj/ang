@@ -9,14 +9,15 @@ import {FormGroup, FormControl, Validator, Validators, ControlValueAccessor, NG_
 
 export class AppComponent implements OnInit {
 
-  appState = '+79797701284';
+  simpleForm = new FormGroup({
+    name: new FormControl(null),
+    number: new FormControl('+77783304444')
+  });
 
   ngOnInit(): void {
-
-  }
-
-  onClick(){
-    console.log(this.appState);
+    this.simpleForm.valueChanges.subscribe((value) => {
+      console.log(value)
+    })
   }
 
 }

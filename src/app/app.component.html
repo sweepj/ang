@@ -1,1 +1,7 @@
-<app-custom-form [default]="{country: 'RU', minlen: 13}" [(ngModel)]="appState" (click)="onClick()"></app-custom-form>
+<form [formGroup]="simpleForm" action="#">
+  <label> Name:  </label>
+  <input type="text" formControlName="name">
+  <app-custom-form formControlName="number" [default]="{country: 'RU', minlen: 0}"></app-custom-form>
+</form>
+
+

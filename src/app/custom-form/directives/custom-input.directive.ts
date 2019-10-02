@@ -16,14 +16,9 @@ export class CustomInputDirective {
   private valueInput;
   constructor(private ElemRef: ElementRef, private render: Renderer2, private customFormCom: CustomFormComponent) {}
 
-
   @HostListener('keydown', ['$event']) onKeyDown(event) {
-    if (this.specialKeys[this.numbers].indexOf(event.key) !== -1) {
+    if ((this.specialKeys[this.numbers].indexOf(event.key) !== -1) || (event.ctrlKey && event.keyCode === 86)) {
       return;
-    }
-
-    if(event.ctrlKey && event.keyCode === 86) {
-      this.ElemRef.nativeElement.querySelector('#inputPhoneNumber').dispatchEvent(new ClipboardEvent('paste'))
     }
 
     if ((/\D/.test(event.key)) || (event.target.value.length === +this.customFormCom.maxLength)) {
@@ -33,11 +28,13 @@ export class CustomInputDirective {
 
   @HostListener('paste', ['$event']) onPaste(event) {
     event.preventDefault();
+    debugger
     let bufferData = event.clipboardData.getData('text/plain');
-    if (bufferData) {
+    if (bufferData[0] !== "+") {
+      alert('Вставьте пожалуйста номер с кодом страны ' +this.customFormCom.findCountry);
+    } else {
       this.customFormCom.numberFromOutside(bufferData);
     }
-    this.customFormCom.numberFromOutside(bufferData);
   }
 
   @HostListener('keyup', ['$event']) onKeyup(event) {
