@@ -72,7 +72,11 @@ export class CustomFormComponent implements
 
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
-        this.clearNumberExcess(this.findCountry + value);
+          if(value.length > 0){
+            this.clearNumberExcess(this.findCountry + value);
+          } else {
+            this.onChange(value);
+          }
       });
   }
 
@@ -85,9 +89,9 @@ export class CustomFormComponent implements
     let countryDialCode, fullNumber;
     if (numberFromOutside.length > 0) {
       this.countries.find(index => {
-        countryDialCode = numberFromOutside.slice(0, (index.dial_code.length));
+        let temp = index.dial_code;
+        countryDialCode = numberFromOutside.slice(0, temp.length);
         if (countryDialCode === index.dial_code) {
-          debugger
           let countrySelect = this.autoSelectCountryNumberFromOutside(this.autoSelectCountry, countryDialCode);
           this.numberForm.get('countryCode').patchValue(countrySelect);
           fullNumber = numberFromOutside.slice(index.dial_code.length, numberFromOutside.length);
@@ -100,14 +104,11 @@ export class CustomFormComponent implements
   }
 
   autoSelectCountryNumberFromOutside(array: Array<string>, dialCode: string): string {
-
     let countryIsFind = '';
     this.countries.find(index => {
       if (countryIsFind.length === 0) {
-
         array.some(i => {
           if ((i === index.code) && (dialCode === index.dial_code)) {
-          debugger
             countryIsFind = index.code;
           }
         })
@@ -132,6 +133,5 @@ export class CustomFormComponent implements
     this.onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
-  }
+  setDisabledState?(isDisabled: boolean): void {}
 }
