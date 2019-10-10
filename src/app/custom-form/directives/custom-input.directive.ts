@@ -28,10 +28,9 @@ export class CustomInputDirective {
 
   @HostListener('paste', ['$event']) onPaste(event) {
     event.preventDefault();
-    debugger
-    let bufferData = event.clipboardData.getData('text/plain');
-    if (bufferData[0] !== "+") {
-      alert('Вставьте пожалуйста номер с кодом страны ' +this.customFormCom.findCountry);
+    const bufferData = event.clipboardData.getData('text/plain');
+    if (bufferData[0] !== '+') {
+      alert('Вставьте пожалуйста номер с кодом страны ' + this.customFormCom.findCountry);
     } else {
       this.customFormCom.numberFromOutside(bufferData);
     }
@@ -39,7 +38,7 @@ export class CustomInputDirective {
 
   @HostListener('keyup', ['$event']) onKeyup(event) {
     this.valueInput = event.target.value;
-    let valueLastLength = this.valueInput.length;
+    const valueLastLength = this.valueInput.length;
     let positionCaret = this.ElemRef.nativeElement.selectionEnd;
     if ((/\D/.test(event.key))) {
       event.preventDefault();

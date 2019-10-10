@@ -1,10 +1,10 @@
-import {Component, DoCheck, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges} from '@angular/core';
+import {Component, DoCheck, ElementRef, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CountryService} from '../services/country.service';
-import {count} from "rxjs/operators";
+import {count} from 'rxjs/operators';
 
 @Component({
   selector: 'app-custom-form',
@@ -24,7 +24,6 @@ export class CustomFormComponent implements
   constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
 
   @Input() default;
-  @Output() close = new EventEmitter<void>();
   numberForm = new FormGroup({
     countryCode: new FormControl(null),
     phoneNumber: new FormControl(null,  [Validators.required])
@@ -37,7 +36,7 @@ export class CustomFormComponent implements
   public regexp = [];
   public replaceVal = [];
   public maxLength: number;
-  private autoSelectCountry = ["IL", "RU", "UA", "KZ"];
+  private autoSelectCountry = ['IL', 'RU', 'UA', 'KZ'];
   public triggerModal: boolean;
   private onChange = (value: any) => {};
 
@@ -53,7 +52,6 @@ export class CustomFormComponent implements
             this.maxLength = i.maxLength;
           }
         });
-        console.log(this.default);
         this.numberFromOutside(this.val);
       });
 
@@ -72,11 +70,11 @@ export class CustomFormComponent implements
 
     this.numberForm.get('phoneNumber').valueChanges
       .subscribe(value => {
-          if(value.length > 0){
-            this.clearNumberExcess(this.findCountry + value);
-          } else {
-            this.onChange(value);
-          }
+        if (value.length > 0) {
+          this.clearNumberExcess(this.findCountry + value);
+        } else {
+          this.onChange(value);
+        }
       });
   }
 
@@ -85,21 +83,26 @@ export class CustomFormComponent implements
     this.onChange(value);
   }
 
-  numberFromOutside(numberFromOutside: string){
+  numberFromOutside(numberFromOutside: string) {
+    // tslint:disable-next-line:one-variable-per-declaration
     let countryDialCode, fullNumber;
+    let countrySelect;
     if (numberFromOutside.length > 0) {
       this.countries.find(index => {
-        let temp = index.dial_code;
+        const temp = index.dial_code.replace(/\s/g, '');
         countryDialCode = numberFromOutside.slice(0, temp.length);
-        if (countryDialCode === index.dial_code) {
-          let countrySelect = this.autoSelectCountryNumberFromOutside(this.autoSelectCountry, countryDialCode);
+        if ((countryDialCode === temp)) {
+          countrySelect = this.autoSelectCountryNumberFromOutside(this.autoSelectCountry, countryDialCode);
           this.numberForm.get('countryCode').patchValue(countrySelect);
           fullNumber = numberFromOutside.slice(index.dial_code.length, numberFromOutside.length);
           this.numberForm.get('phoneNumber').patchValue(fullNumber);
+          if (countrySelect) {
+            return true;
+          }
         }
       });
       // исскуственный вызов события нажатие на клавишу
-      this.elemRef.nativeElement.querySelector('#inputPhoneNumber').dispatchEvent(new KeyboardEvent('keyup'))
+      this.elemRef.nativeElement.querySelector('#inputPhoneNumber').dispatchEvent(new KeyboardEvent('keyup'));
     }
   }
 
@@ -108,18 +111,18 @@ export class CustomFormComponent implements
     this.countries.find(index => {
       if (countryIsFind.length === 0) {
         array.some(i => {
-          if ((i === index.code) && (dialCode === index.dial_code)) {
+          if ((i === index.code) && (dialCode === index.dial_code.replace(/\s/g, ''))) {
             countryIsFind = index.code;
           }
-        })
+        });
       }
     });
     return String(countryIsFind);
   }
-
+  //
   // closeModal(){
-  //   this.triggerModal = false;
-  // }
+    //   this.triggerModal = false;
+    // }
 
   writeValue(value: string): void {
     this.val = value;

@@ -11,13 +11,13 @@ export class AppComponent implements OnInit {
 
   simpleForm = new FormGroup({
     name: new FormControl(null),
-    number: new FormControl('+77783304444')
+    number: new FormControl('+79787701284')
   });
 
   ngOnInit(): void {
     this.simpleForm.valueChanges.subscribe((value) => {
-      console.log(value)
-    })
+      console.log(value);
+    });
   }
 
 }
