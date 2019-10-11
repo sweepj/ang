@@ -1,21 +1,36 @@
 <form autocomplete="off" action="#"
       [formGroup]="numberForm"
 >
-  <label>
-    Select Country:
-    <select formControlName="countryCode" id="selectCountry">
-      <option *ngFor="let country of countries" [value]="country.code">{{country.name}}</option>
-    </select>
-  </label>
-  <br>
   <div style="margin-top: 10px;">
-    <label style="display: inline">
-      Number phone:
+    <label class="select_country">
+      <select  id="selectCountry" formControlName="countryCode">
+        <option class="flag" *ngFor="let country of countries" [value]="country.code" >
+          {{country.code}}
+<!--          <div id="dial_code">-->
+<!--            {{country.dial_code}}-->
+<!--          </div>-->
+        </option>
+
+      </select>
     </label>
-    <div id="dial_code">{{findCountry}}</div>
+    <div (click)="triggerModal = !triggerModal">Click</div>
+    <div *ngIf="triggerModal;then dropdown" formControlName="countryCode"></div>
+
     <input type="text" id="inputPhoneNumber"
-           appCustomInput numbers="number" formControlName="phoneNumber"
-           minlength="{{maxLength}}">
+       appCustomInput numbers="number"
+       formControlName="phoneNumber"
+       minlength="{{maxLength}}"
+    >
   </div>
   <br>
 </form>
+
+<ng-template #dropdown>
+  <div class="select-menu">
+    <ul>
+      <li *ngFor="let country of countries" [value]="country.code" (click)="valueBlock($event)">
+        {{country.code}}
+      </li>
+    </ul>
+  </div>
+</ng-template>

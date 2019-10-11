@@ -37,7 +37,7 @@ export class CustomFormComponent implements
   public replaceVal = [];
   public maxLength: number;
   private autoSelectCountry = ['IL', 'RU', 'UA', 'KZ'];
-  public triggerModal: boolean;
+  public triggerModal = false;
   private onChange = (value: any) => {};
 
   ngOnInit(): void {
@@ -137,4 +137,8 @@ export class CustomFormComponent implements
   }
 
   setDisabledState?(isDisabled: boolean): void {}
+
+  valueBlock(event) {
+
+  }
 }
