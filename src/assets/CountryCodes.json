@@ -211,11 +211,6 @@
     "code":"CN"
   },
   {
-    "name":"Christmas Island",
-    "dial_code":"+61",
-    "code":"CX"
-  },
-  {
     "name":"Colombia",
     "dial_code":"+57",
     "code":"CO"
@@ -594,11 +589,6 @@
     "code":"MU"
   },
   {
-    "name":"Mayotte",
-    "dial_code":"+262",
-    "code":"YT"
-  },
-  {
     "name":"Mexico",
     "dial_code":"+52",
     "code":"MX"
@@ -652,11 +642,6 @@
     "name":"Netherlands",
     "dial_code":"+31",
     "code":"NL"
-  },
-  {
-    "name":"Netherlands Antilles",
-    "dial_code":"+599",
-    "code":"AN"
   },
   {
     "name":"New Caledonia",
@@ -834,11 +819,6 @@
     "code":"ZA"
   },
   {
-    "name":"South Georgia and the South Sandwich Islands",
-    "dial_code":"+500",
-    "code":"GS"
-  },
-  {
     "name":"Spain",
     "dial_code":"+34",
     "code":"ES"
@@ -992,16 +972,6 @@
     "code":"ZW"
   },
   {
-    "name":"land Islands",
-    "dial_code":"+98",
-    "code":"AX"
-  },
-  {
-    "name":"Antarctica",
-    "dial_code":"+99",
-    "code":"AQ"
-  },
-  {
     "name":"Bolivia, Plurinational State of",
     "dial_code":"+591",
     "code":"BO"
@@ -1010,11 +980,6 @@
     "name":"Brunei Darussalam",
     "dial_code":"+673",
     "code":"BN"
-  },
-  {
-    "name":"Cocos (Keeling) Islands",
-    "dial_code":"+61",
-    "code":"CC"
   },
   {
     "name":"Congo, The Democratic Republic of the",
@@ -1050,16 +1015,6 @@
     "name":"Iran, Islamic Republic of",
     "dial_code":"+98",
     "code":"IR"
-  },
-  {
-    "name":"Isle of Man",
-    "dial_code":"+44",
-    "code":"IM"
-  },
-  {
-    "name":"Jersey",
-    "dial_code":"+44",
-    "code":"JE"
   },
   {
     "name":"Korea, Democratic People's Republic of",
@@ -1110,11 +1065,6 @@
     "name":"Palestinian Territory, Occupied",
     "dial_code":"+970",
     "code":"PS"
-  },
-  {
-    "name":"Pitcairn",
-    "dial_code":"+872",
-    "code":"PN"
   },
   {
     "name":"Réunion",
@@ -1173,11 +1123,6 @@
     "name":"Somalia",
     "dial_code":"+252",
     "code":"SO"
-  },
-  {
-    "name":"Svalbard and Jan Mayen",
-    "dial_code":"+47",
-    "code":"SJ"
   },
   {
     "name":"Syrian Arab Republic",

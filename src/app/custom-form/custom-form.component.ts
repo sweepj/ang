@@ -31,7 +31,9 @@ export class CustomFormComponent implements
 
   onTouched: () => void;
   private val = '';
-  private clickLiElement = 'AL';
+  private clickLiElement = 'Russia';
+  private clickCountryCode;
+  private countryDialCode;
   public countries = [];
   public findCountry: any;
   public regexp = [];
@@ -140,7 +142,14 @@ export class CustomFormComponent implements
   setDisabledState?(isDisabled: boolean): void {}
 
   valueBlock(event) {
-    this.clickLiElement = event.target.outerText;
-    console.log(event.target.outerText);
+    this.clickLiElement = event.target.dataset.valueCountry;
+    this.countries.find(index => {
+        if (index.name === this.clickLiElement.replace(/\s/g, '')) {
+          this.clickCountryCode = index.code;
+          this.countryDialCode = index.dial_code;
+          this.numberForm.get('countryCode').patchValue(this.clickCountryCode);
+        }
+    });
+    console.log(event);
   }
 }

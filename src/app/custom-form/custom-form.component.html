@@ -2,19 +2,22 @@
       [formGroup]="numberForm"
 >
   <div style="margin-top: 10px;">
-    <label class="select_country">
-      <select  id="selectCountry" formControlName="countryCode">
-        <option class="flag" *ngFor="let country of countries" [value]="country.code" >
-          {{country.code}}
-<!--          <div id="dial_code">-->
-<!--            {{country.dial_code}}-->
-<!--          </div>-->
-        </option>
+<!--    <label class="select_country">-->
+<!--      <select  id="selectCountry" formControlName="countryCode">-->
+<!--        <option class="flag" *ngFor="let country of countries" [value]="country.code" >-->
+<!--          {{country.code}}-->
+<!--&lt;!&ndash;          <div id="dial_code">&ndash;&gt;-->
+<!--&lt;!&ndash;            {{country.dial_code}}&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--        </option>-->
 
-      </select>
-    </label>
-    <div (click)="triggerModal = !triggerModal">{{clickLiElement}}</div>
-    <div *ngIf="triggerModal;then dropdown" formControlName="countryCode" class="dropdown"></div>
+<!--      </select>-->
+<!--    </label>-->
+    <div (click)="triggerModal = !triggerModal" class="customSelect" formControlName="countryCode">
+      <div class="flag {{clickCountryCode | lowercase}}"></div>
+      {{countryDialCode}}
+    </div>
+
 
     <input type="text" id="inputPhoneNumber"
        appCustomInput numbers="number"
@@ -22,14 +25,15 @@
        minlength="{{maxLength}}"
     >
   </div>
+  <div *ngIf="triggerModal;then dropdown" formControlName="countryCode" class="dropdown"></div>
   <br>
 </form>
 
 <ng-template #dropdown>
   <div class="select-menu">
     <ul>
-      <li *ngFor="let country of countries" (click)="valueBlock($event)" class="name_country">
-        <div class="flag {{country.code | lowercase}}"></div>
+      <li *ngFor="let country of countries" (click)="valueBlock($event)" [attr.data-value-country]="country.name" class="name_country">
+        <div class="flag {{country.code | lowercase}}" [attr.data-value-country]="country.name"></div>
         {{country.name}}
       </li>
     </ul>
