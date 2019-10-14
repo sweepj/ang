@@ -13,8 +13,8 @@
 
       </select>
     </label>
-    <div (click)="triggerModal = !triggerModal">Click</div>
-    <div *ngIf="triggerModal;then dropdown" formControlName="countryCode"></div>
+    <div (click)="triggerModal = !triggerModal">{{clickLiElement}}</div>
+    <div *ngIf="triggerModal;then dropdown" formControlName="countryCode" class="dropdown"></div>
 
     <input type="text" id="inputPhoneNumber"
        appCustomInput numbers="number"
@@ -28,8 +28,9 @@
 <ng-template #dropdown>
   <div class="select-menu">
     <ul>
-      <li *ngFor="let country of countries" [value]="country.code" (click)="valueBlock($event)">
-        {{country.code}}
+      <li *ngFor="let country of countries" (click)="valueBlock($event)" class="name_country">
+        <div class="flag {{country.code | lowercase}}"></div>
+        {{country.name}}
       </li>
     </ul>
   </div>

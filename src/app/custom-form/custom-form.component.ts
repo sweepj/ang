@@ -31,6 +31,7 @@ export class CustomFormComponent implements
 
   onTouched: () => void;
   private val = '';
+  private clickLiElement = 'AL';
   public countries = [];
   public findCountry: any;
   public regexp = [];
@@ -139,6 +140,7 @@ export class CustomFormComponent implements
   setDisabledState?(isDisabled: boolean): void {}
 
   valueBlock(event) {
-
+    this.clickLiElement = event.target.outerText;
+    console.log(event.target.outerText);
   }
 }
