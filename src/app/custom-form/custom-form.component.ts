@@ -1,4 +1,16 @@
-import {Component, DoCheck, ElementRef, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  Renderer2,
+  SimpleChanges
+} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
 import {HttpClient, HttpResponse} from '@angular/common/http';
@@ -29,6 +41,7 @@ export class CustomFormComponent implements
     phoneNumber: new FormControl(null,  [Validators.required])
   });
 
+
   onTouched: () => void;
   private val = '';
   private clickLiElement = 'Russia';
@@ -42,6 +55,17 @@ export class CustomFormComponent implements
   private autoSelectCountry = ['IL', 'RU', 'UA', 'KZ'];
   public triggerModal = false;
   private onChange = (value: any) => {};
+
+
+  @HostListener('document:click', ['$event']) clickOut(event) {
+    const classListEvent = event.toElement.classList;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < classListEvent.length; i++) {
+      if (classListEvent[i] === 'name_country') {
+        this.triggerModal = false;
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.countryService.getJSON()
@@ -144,12 +168,11 @@ export class CustomFormComponent implements
   valueBlock(event) {
     this.clickLiElement = event.target.dataset.valueCountry;
     this.countries.find(index => {
-        if (index.name === this.clickLiElement.replace(/\s/g, '')) {
+        if (index.name === this.clickLiElement) {
           this.clickCountryCode = index.code;
           this.countryDialCode = index.dial_code;
           this.numberForm.get('countryCode').patchValue(this.clickCountryCode);
         }
     });
-    console.log(event);
   }
 }
