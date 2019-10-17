@@ -13,7 +13,10 @@
 
 <!--      </select>-->
 <!--    </label>-->
-    <div (click)="triggerModal = !triggerModal" class="customSelect">
+    <div (click)="triggerModal = !triggerModal"
+         class="customSelect"
+         [ngClass]="triggerModal ? 'customSelect-active' : 'customSelect-inactive'"
+    >
       <div class="flag {{clickCountryCode | lowercase}}"></div>
       {{countryDialCode}}
     </div>
@@ -30,7 +33,7 @@
 </form>
 
 <ng-template #dropdown>
-  <div class="select-menu">
+  <div class="select-menu" id="select">
     <ul>
       <li *ngFor="let country of countries" (click)="valueBlock($event)" [attr.data-value-country]="country.name" class="name_country">
         <div class="flag {{country.code | lowercase}}" [attr.data-value-country]="country.name"></div>

@@ -58,12 +58,15 @@ export class CustomFormComponent implements
 
 
   @HostListener('document:click', ['$event']) clickOut(event) {
-    const classListEvent = event.toElement.classList;
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < classListEvent.length; i++) {
-      if (classListEvent[i] === 'name_country') {
-        this.triggerModal = false;
-      }
+    console.log(event);
+    if (event.target === '') {
+
+    // if (this.triggerModal === true) {
+    //   // tslint:disable-next-line:prefer-for-of
+    //   for (let i = 0; i < classListEvent.length; i++) {
+    //     console.log(classListEvent[i]);
+    //     (classListEvent[i] === 'name_country') ? this.triggerModal = true : this.triggerModal = false;
+    //   }
     }
   }
 
@@ -146,10 +149,7 @@ export class CustomFormComponent implements
     });
     return String(countryIsFind);
   }
-  //
-  // closeModal(){
-    //   this.triggerModal = false;
-    // }
+
 
   writeValue(value: string): void {
     this.val = value;
