@@ -31,6 +31,7 @@ import {count} from 'rxjs/operators';
 
 export class CustomFormComponent implements
   OnInit,
+  DoCheck,
   ControlValueAccessor {
 
   constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
@@ -56,19 +57,6 @@ export class CustomFormComponent implements
   public triggerModal = false;
   private onChange = (value: any) => {};
 
-
-  @HostListener('document:click', ['$event']) clickOut(event) {
-    console.log(event);
-    if (event.target === '') {
-
-    // if (this.triggerModal === true) {
-    //   // tslint:disable-next-line:prefer-for-of
-    //   for (let i = 0; i < classListEvent.length; i++) {
-    //     console.log(classListEvent[i]);
-    //     (classListEvent[i] === 'name_country') ? this.triggerModal = true : this.triggerModal = false;
-    //   }
-    }
-  }
 
   ngOnInit(): void {
     this.countryService.getJSON()
@@ -106,6 +94,27 @@ export class CustomFormComponent implements
           this.onChange(value);
         }
       });
+  }
+
+  toggleListCountry(event) {
+    debugger
+    for (const value of event.target.classList) {
+      if (value !== 'name_country') {
+        this.triggerModal = false;
+      } else {
+        this.triggerModal = true;
+        break;
+      }
+    }
+  }
+
+  ngDoCheck() {
+    const activeListCountry = this.elemRef.nativeElement.querySelector('.customSelect-active');
+    if (activeListCountry) {
+      this.elemRef.nativeElement.addEventListener('click', this.toggleListCountry);
+      this.elemRef.nativeElement.removeEventListener('click', this.toggleListCountry, true);
+    }
+
   }
 
   clearNumberExcess(value) {
@@ -172,6 +181,7 @@ export class CustomFormComponent implements
           this.clickCountryCode = index.code;
           this.countryDialCode = index.dial_code;
           this.numberForm.get('countryCode').patchValue(this.clickCountryCode);
+          this.triggerModal = false;
         }
     });
   }

@@ -21,7 +21,6 @@
       {{countryDialCode}}
     </div>
 
-
     <input type="text" id="inputPhoneNumber"
        appCustomInput numbers="number"
        formControlName="phoneNumber"
@@ -33,7 +32,7 @@
 </form>
 
 <ng-template #dropdown>
-  <div class="select-menu" id="select">
+  <div class="select-menu" id="select" >
     <ul>
       <li *ngFor="let country of countries" (click)="valueBlock($event)" [attr.data-value-country]="country.name" class="name_country">
         <div class="flag {{country.code | lowercase}}" [attr.data-value-country]="country.name"></div>
