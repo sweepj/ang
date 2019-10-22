@@ -31,7 +31,6 @@ import {count} from 'rxjs/operators';
 
 export class CustomFormComponent implements
   OnInit,
-  DoCheck,
   ControlValueAccessor {
 
   constructor(private countryService: CountryService, private render: Renderer2, private elemRef: ElementRef) { }
@@ -96,27 +95,6 @@ export class CustomFormComponent implements
       });
   }
 
-  toggleListCountry(event) {
-    debugger
-    for (const value of event.target.classList) {
-      if (value !== 'name_country') {
-        this.triggerModal = false;
-      } else {
-        this.triggerModal = true;
-        break;
-      }
-    }
-  }
-
-  ngDoCheck() {
-    const activeListCountry = this.elemRef.nativeElement.querySelector('.customSelect-active');
-    if (activeListCountry) {
-      this.elemRef.nativeElement.addEventListener('click', this.toggleListCountry);
-      this.elemRef.nativeElement.removeEventListener('click', this.toggleListCountry, true);
-    }
-
-  }
-
   clearNumberExcess(value) {
     value = value.replace(/\D/g, '');
     this.onChange(value);
@@ -132,6 +110,8 @@ export class CustomFormComponent implements
         countryDialCode = numberFromOutside.slice(0, temp.length);
         if ((countryDialCode === temp)) {
           countrySelect = this.autoSelectCountryNumberFromOutside(this.autoSelectCountry, countryDialCode);
+          this.clickCountryCode = countrySelect;
+          this.countryDialCode = countryDialCode;
           this.numberForm.get('countryCode').patchValue(countrySelect);
           fullNumber = numberFromOutside.slice(index.dial_code.length, numberFromOutside.length);
           this.numberForm.get('phoneNumber').patchValue(fullNumber);
